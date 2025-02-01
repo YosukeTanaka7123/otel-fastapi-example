@@ -4,7 +4,11 @@ from sqlalchemy.orm.exc import NoResultFound
 from starlette.requests import Request
 
 from core.lifespan import lifespan
+from core.logging import getLogger
 from routers import heros, posts
+
+logger = getLogger(__name__)
+
 
 app = FastAPI(lifespan=lifespan)
 
@@ -16,6 +20,11 @@ async def not_found_exception_handler(request: Request, exception: NoResultFound
 
 @app.get("/")
 async def health():
+    logger.debug("Health Check")
+    logger.info("Health Check")
+    logger.warning("Health Check")
+    logger.error("Health Check")
+    logger.critical("Health Check")
     return {"Health": "OK"}
 
 
