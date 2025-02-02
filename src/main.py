@@ -5,12 +5,15 @@ from starlette.requests import Request
 
 from core.lifespan import lifespan
 from core.logging import getLogger
+from core.opentelemetry import setup_opentelemetry
 from routers import heros, posts
 
 logger = getLogger(__name__)
 
 
 app = FastAPI(lifespan=lifespan)
+
+setup_opentelemetry(app)
 
 
 @app.exception_handler(NoResultFound)

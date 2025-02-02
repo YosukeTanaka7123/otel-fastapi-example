@@ -4,11 +4,21 @@ from core.config import get_settings
 
 settings = get_settings()
 
-handler = logging.StreamHandler()
-formatter = logging.Formatter(
-    fmt="%(asctime)s.%(msecs)03d [%(levelname)-8s] %(filename)s:%(lineno)d (%(funcName)s) - %(message)s",
+
+class CustomFormatter(logging.Formatter):
+    def format(self, record):
+        if not hasattr(record, "otelTraceID"):
+            record.otelTraceID = "00000000000000000000000000000000"
+        if not hasattr(record, "otelSpanID"):
+            record.otelSpanID = "0000000000000000"
+        return super().format(record)
+
+
+formatter = CustomFormatter(
+    fmt="%(asctime)s.%(msecs)03d %(levelname)-8s [%(otelTraceID)s-%(otelSpanID)s] %(filename)s:%(lineno)d (%(funcName)s) - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
+handler = logging.StreamHandler()
 handler.setFormatter(formatter)
 
 

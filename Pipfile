@@ -9,6 +9,12 @@ pydantic-settings = "*"
 sqlmodel = "*"
 aiosqlite = "*"
 greenlet = "*"
+opentelemetry-api = "*"
+opentelemetry-sdk = "*"
+opentelemetry-instrumentation-logging = "*"
+opentelemetry-instrumentation-fastapi = "*"
+opentelemetry-instrumentation-httpx = "*"
+opentelemetry-instrumentation-sqlalchemy = "*"
 
 [dev-packages]
 black = "*"
