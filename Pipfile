@@ -15,6 +15,7 @@ opentelemetry-instrumentation-logging = "*"
 opentelemetry-instrumentation-fastapi = "*"
 opentelemetry-instrumentation-httpx = "*"
 opentelemetry-instrumentation-sqlalchemy = "*"
+azure-monitor-opentelemetry = "*"
 
 [dev-packages]
 black = "*"

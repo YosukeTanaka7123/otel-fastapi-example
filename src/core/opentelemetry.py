@@ -1,5 +1,6 @@
 from typing import Any
 
+from azure.monitor.opentelemetry import configure_azure_monitor
 from fastapi import FastAPI
 from opentelemetry import trace
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
@@ -39,7 +40,10 @@ def client_request_hook(
 # OpenTelemetry configuration
 def setup_opentelemetry(app: FastAPI):
     # Setup tracer and exporter
-    configure_console()
+    if settings.applicationinsights_connection_string:
+        configure_azure_monitor(logger_name=settings.otel_service_name)
+    else:
+        configure_console()
 
     # Instrument Logging, FastAPI, HTTPX, and SQLAlchemy
     LoggingInstrumentor().instrument()
