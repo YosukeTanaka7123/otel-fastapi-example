@@ -3,6 +3,7 @@ from typing import Any
 from azure.monitor.opentelemetry import configure_azure_monitor
 from fastapi import FastAPI
 from opentelemetry import trace
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.httpx import HTTPXClientInstrumentor
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
@@ -16,6 +17,20 @@ from core.logging import getLogger
 
 settings = get_settings()
 logger = getLogger(__name__)
+
+
+def configure_openobserve():
+    provider = TracerProvider()
+    processor = BatchSpanProcessor(
+        OTLPSpanExporter(
+            endpoint=settings.openobserve_http_endpoint,
+            headers={"Authorization": f"Basic {settings.openobserve_authorization}"},
+        )
+    )
+    provider.add_span_processor(processor)
+
+    # Sets the global default tracer provider
+    trace.set_tracer_provider(provider)
 
 
 def configure_console():
@@ -42,6 +57,8 @@ def setup_opentelemetry(app: FastAPI):
     # Setup tracer and exporter
     if settings.applicationinsights_connection_string:
         configure_azure_monitor(logger_name=settings.otel_service_name)
+    elif settings.openobserve_http_endpoint:
+        configure_openobserve()
     else:
         configure_console()
 

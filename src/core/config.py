@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     db_url: str = "sqlite+aiosqlite:///./local.db"
     api_url: str = "https://jsonplaceholder.typicode.com"
     applicationinsights_connection_string: str = ""
+    openobserve_http_endpoint: str = ""
+    openobserve_authorization: str = ""
 
     model_config = SettingsConfigDict(env_file=".env.local")
 
