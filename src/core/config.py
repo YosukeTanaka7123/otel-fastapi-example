@@ -6,6 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    otel_service_name: str = "myapp"
     log_level: str = "INFO"
     db_url: str = "sqlite+aiosqlite:///./local.db"
     api_url: str = "https://jsonplaceholder.typicode.com"

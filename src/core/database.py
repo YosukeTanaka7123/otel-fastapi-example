@@ -6,9 +6,11 @@ from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from core.config import get_settings
+from core.logging import getLogger
 
 settings = get_settings()
 async_engine = create_async_engine(settings.db_url)
+logger = getLogger(__name__)
 
 
 async def create_db_and_tables():
@@ -28,6 +30,7 @@ async def get_async_session():
             yield async_session
             await async_session.commit()
         except Exception as e:
+            logger.exception("Error occurred in get_async_session.")
             await async_session.rollback()
             raise e
 
